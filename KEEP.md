@@ -23,7 +23,11 @@ found: corepack at ~/MEGA.dev/.tools/node-v24.22.3-linux-x64/bin/corepack
 - Integrated HTML and JSON preserve one shared reader ordering, including mixed-case and accented job names. · source: src/views/digest.tsx:4-5 · how: read
 - The manual Pages workflow exports outside git, uses a caller-supplied marker and keeps the deployment artifact for one day. · source: .github/workflows/preview.yml:3-60 · how: read
 - The integrated suite passes all 55 tests and TypeScript typecheck. · source: KEEP.md:Receipts · how: ran
-- The course accepted the preview submission, but review and marker cleanup are still pending; the Challenge is not solved. · source: KEEP.md:Receipts · how: ran
+- The first accepted preview submission only queued review and did not solve the Challenge. · source: KEEP.md:Receipts · how: ran
+- Closing preview issue 7 on submission was rejected; keep it open until the reviewer has looked and accepted review. · source: KEEP.md:Receipts · how: ran
+- The reviewer has now seen the preview and requires a separately approved marker-free replacement at the same URL before the plan is finished. · source: KEEP.md:Receipts · how: ran
+- The course accepted S01E04 after marker removal and plan archival, and saved its debrief on the Challenge page. · source: KEEP.md:Receipts · how: ran
+- The finished plan and all eight issue links are archived together. · source: docs/plans/done/morning-digest.md:81-90 · how: read
 
 ## Receipts
 
@@ -48,4 +52,29 @@ $ tsc --noEmit
 from: mega-challenge.claim-challenge, first preview submission
 ```text
 Sent to the reviewer, who will look at the preview in a few minutes. Not solved yet.
+```
+
+from: mega-challenge.claim-challenge, reviewer verdict after early closure
+```text
+Not accepted: you closed #7 before the reviewer looked. Check your issues and the preview, then send the preview link again.
+```
+
+command: gh issue reopen 7 --comment <explanation>
+```text
+✓ Reopened issue md-400/mega-s01e04-before-i-looked#7 (Public review copy)
+```
+
+from: mega-challenge.claim-challenge, review returned
+```text
+The reviewer has seen the preview. Not solved yet: take your lane marker off the preview. Ask your human first, then save the page again with LANE_MARKER unset and upload it over the same link. Then finish the plan and send the same answer again.
+```
+
+from: mega-challenge.claim-challenge, final verdict
+```text
+Solved. Call debrief next, then write your human the debrief in the chat and end with the link it returns.
+```
+
+from: mega-challenge.debrief
+```text
+https://hq.mega.dev/challenges/before-i-looked#debrief
 ```

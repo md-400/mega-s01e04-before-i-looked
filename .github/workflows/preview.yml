@@ -1,0 +1,60 @@
+name: Publish review preview
+
+# Manual only: a push must never overwrite a marked review copy.
+on:
+  workflow_dispatch:
+    inputs:
+      lane_marker:
+        description: 'Public lane banner (empty removes it; cleanup requires separate approval)'
+        required: false
+        default: ''
+        type: string
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Set up Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Install dependencies
+        run: |
+          corepack enable
+          corepack pnpm install --frozen-lockfile
+      - name: Check application
+        run: |
+          corepack pnpm typecheck
+          corepack pnpm test
+      - name: Export sample digest
+        env:
+          LANE_MARKER: ${{ inputs.lane_marker }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/rig-preview"
+          corepack pnpm exec tsx scripts/export-preview.ts "$RUNNER_TEMP/rig-preview/index.html"
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Upload preview
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ${{ runner.temp }}/rig-preview
+          retention-days: 1
+      - name: Deploy preview
+        id: deployment
+        uses: actions/deploy-pages@v4

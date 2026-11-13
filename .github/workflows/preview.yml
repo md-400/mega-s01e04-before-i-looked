@@ -47,6 +47,9 @@ jobs:
           LANE_MARKER: ${{ inputs.lane_marker }}
         run: |
           mkdir -p "$RUNNER_TEMP/rig-preview"
+          if [ -z "$LANE_MARKER" ]; then
+            unset LANE_MARKER
+          fi
           corepack pnpm exec tsx scripts/export-preview.ts "$RUNNER_TEMP/rig-preview/index.html"
       - name: Configure Pages
         uses: actions/configure-pages@v5

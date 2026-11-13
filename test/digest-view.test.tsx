@@ -46,11 +46,13 @@ describe('digest view', () => {
     expect(html).not.toContain('<script');
   });
 
-  it('sorts jobs without mutating the shared rows', async () => {
-    const rows = [{ ...row, job: 'zulu' }, row];
+  it('preserves the shared reader code-point order without locale sorting or mutation', async () => {
+    const jobs = ['!job', 'Zebra', '_job', 'alpha', 'éclair'];
+    const rows = jobs.map((job) => ({ ...row, job }));
     const html = await render(rows);
-    expect(html.indexOf('<td>alpha</td>')).toBeLessThan(html.indexOf('<td>zulu</td>'));
-    expect(rows[0].job).toBe('zulu');
+    const renderedJobs = [...html.matchAll(/<tr><td>(.*?)<\/td>/g)].map((match) => match[1]);
+    expect(renderedJobs).toEqual(jobs);
+    expect(rows.map((entry) => entry.job)).toEqual(jobs);
   });
 
   it('marks three retries and historical failures even after recovery', async () => {
